@@ -1,0 +1,62 @@
+<body><ion-header>
+  <ion-toolbar color="custom" fill="outline">
+    <ion-title class="ion-text-center">
+      <ion-icon name="stats-chart-outline" size="large"></ion-icon>
+      <b> &nbsp;Dashboard &nbsp;</b>
+      <ion-icon name="stats-chart-outline" size="large"></ion-icon>
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="#fff" defaultHref="home"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content><br/>
+  <ion-row>
+    <ion-col sizeLg="10" offsetLg="1">
+      <ion-card>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>User Name</th>
+              <th>Database</th>
+              <th>Schema</th>
+              <th>Table Details</th>
+              <th>Capture Date</th>
+              <th>Download Path</th>
+              <th>Download</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of dashboard">
+              <td>{{record.ID}}</td>
+              <td>{{record.Name}}</td>
+              <td>{{record.UserName}}</td>
+              <td>{{record.DatabaseName}}</td>
+              <td>{{record.SchemaName}}</td>
+              <td>{{record.TableDetails}}</td>
+              <td>{{record.CaptureDate}}</td>
+              <td>
+                 <ion-input (ionChange)="directoryEvent($event,record.ID)" type="text" 
+                  [(ngModel)]="record.directory" placeholder="Enter download path"></ion-input> 
+                <!-- <ion-input (ionChange)="directoryEvent($event)" type="text"
+                     value="" [(ngModel)]="this.directory" > -->
+              </td>
+              <td>
+                <ion-button shape="round" size="small" color="tertiary" (click)="download(record.ID)">
+                  <ion-icon name="arrow-down-circle-outline"></ion-icon>
+                </ion-button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ion-card></ion-col
+    ></ion-row>
+</ion-content>
+
+<ion-footer id="footer" class="footer text-muted">
+  Copyright © 2022 Analytics. All rights reserved.
+</ion-footer>
+</body>

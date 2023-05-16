@@ -1,0 +1,94 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+  .alert-wrapper{
+    max-width: unset !important;
+    width: 30% !important;
+  }
+
+  .alert-radio-group::-webkit-scrollbar,
+  .alert-checkbox-group::-webkit-scrollbar {
+    width: 1em;
+    display: block !important;
+  }
+
+  .alert-radio-group::-webkit-scrollbar-track,
+  .alert-checkbox-group::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  }
+
+  .alert-radio-group::-webkit-scrollbar-thumb,
+  .alert-checkbox-group::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+  }
+
+  .alert-radio-label {
+    white-space: normal !important;
+  }
+
+  ion-select::part(text) {
+    white-space: normal !important;
+    word-wrap: break-word !important;
+  }
+
+
+  ion-alert.custom-alert {
+  --backdrop-opacity: 0.7;
+  
+  }
+
+  .custom-alert .alert-button-group {
+    padding: 8px;
+  }
+
+  button.alert-button.alert-button-confirm {
+    background-color:#2568ab;
+    color: white;
+  }
+
+  .md button.alert-button.alert-button-confirm {
+    border-radius: 4px;
+  }
+
+  .ios .custom-alert button.alert-button {
+    border: 0.55px solid rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.2)
+  }
+
+  .ios button.alert-button.alert-button-cancel {
+    border-right: 0;
+    border-bottom-left-radius: 13px;
+    border-top-left-radius: 13px;
+  }
+
+  .ios button.alert-button.alert-button-confirm {
+    border-bottom-right-radius: 13px;
+    border-top-right-radius: 13px;
+  }
+
+  

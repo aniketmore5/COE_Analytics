@@ -1,0 +1,720 @@
+<!-- <body>
+  <ion-header [translucent]="true"> 
+    <ion-toolbar color="custom">  
+
+      <ion-buttons icon only clear class="round" (click)="showSearch()" 
+        color="#0070ad" size="small">&nbsp;
+        <ion-icon name="list-outline" size="large"></ion-icon>
+      </ion-buttons>
+
+      <ion-title class="ion-text-center">
+        <ion-icon name="cloud-download"></ion-icon>
+          &nbsp;Download Page&nbsp;
+        <ion-icon name="cloud-download"></ion-icon>
+      </ion-title>  
+
+      <ion-buttons slot="start">
+        <ion-back-button color="#fff" defaultHref="choose-options"></ion-back-button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </ion-buttons> 
+
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="ion-text-center" color="#f7f7f7">
+    <br> 
+
+    <ion-item *ngIf="showSearchBar" class="sidenav" color="#0070ad">
+      <ion-col>
+        <ion-row>
+          <h4>
+            <ion-icon name="analytics-outline" size="large"></ion-icon>
+            <a href="download-dashboard"><b>Dashboard</b></a>
+          </h4>
+        </ion-row>
+
+        <ion-row>
+          <h4>
+            <ion-icon name="analytics-outline" size="large"></ion-icon>
+            <a href="download-log"><b>Download Log</b></a>
+          </h4>
+        </ion-row>
+
+      </ion-col>
+    </ion-item>
+
+    <ion-row>
+      <ion-col sizeLg="6" offsetLg="3" >         
+        <ion-card > 
+
+          <ion-item fill="outline">
+            <ion-grid>
+              <ion-row>
+
+                <ion-col>
+                  <h6>
+                    <ion-label >
+                      <span class="required">*</span> 
+                      Select Database
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col >
+                   <ion-item fill="Solid " color="primary">
+                     <ion-select  (ionChange)="DatabaseSelectEvent($event)" 
+                      name="database"  multiple="false" placeholder="Select Database"> 
+                      <ion-select-option 
+                        *ngFor="let db of databases" [value]="db.id">{{db}}
+                        
+                      </ion-select-option>
+
+                    </ion-select>
+                  </ion-item>  /
+
+                  
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+           
+          <ion-item fill="outline" color="primary">
+            <ion-grid>
+              <ion-row>
+              
+                <ion-col>
+                  <h6>
+                    <ion-label > 
+                      <span class="required">*</span> 
+                      Select Schema
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col >
+                  <ion-item fill="outline" color="primary" >
+                    <ion-select (ionChange)="SchemaSelectEvent($event)"  
+                      name="schema" multiple="false" placeholder="Select Schema">
+
+                      <ion-select-option 
+                        *ngFor="let db of schemas" [value]="db.id">{{db}}
+                      </ion-select-option>
+
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+            
+          <ion-item fill="outline" color="primary">
+            <ion-grid>
+              <ion-row>
+
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> 
+                      Select Tables or Views
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item fill="outline" color="primary">
+                    <ionic-selectable [(ngModel)]="selectTable" 
+                      placeholder = "Select Table/ View" [items]="this.tables" 
+                      (onChange)="tableSelectEvent($event)" [canSearch]="true" 
+                      [isMultiple]="true" closeButtonText="X" closeButtonSlot="end">
+
+                      <ng-template ionicSelectableTitleTemplate>
+                        Select Tables  
+                      </ng-template>  
+
+                      <ng-template ionicSelectableCloseButtonTemplate>
+                        <ion-icon name="close-circle" 
+                          style="font-size: 35px; color: #cc0c16">
+                        </ion-icon>
+                      </ng-template> 
+
+                    </ionic-selectable>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+
+          <ion-item fill="outline" color="primary">
+            <ion-grid>
+              <ion-row>
+              
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> 
+                      Select File Format
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item fill="outline" color="primary">
+                    <ion-select (ionChange)="fileTypeEvent($event)" 
+                      [value]="selectedFileType" multiple="false" placeholder="Select File Format">
+
+                      <ion-select-option value="csv">CSV</ion-select-option>
+                      <ion-select-option value="xls">Excel</ion-select-option>
+                      <ion-select-option value="tsv">TSV</ion-select-option>
+                      <ion-select-option value="json">JSON</ion-select-option>
+                      <ion-select-option value="txt">TEXT</ion-select-option>
+
+                    </ion-select>
+
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+         
+          <ion-item *ngIf="isSeparator" fill="outline" color="primary">
+            <ion-grid>
+              <ion-row>
+
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> 
+                      Select Field Separator
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item  fill="outline" color="primary">
+                    <ion-select (ionChange)="seperatorTypeEvent($event)"  
+                      value="" multiple="false" placeholder="Select Separator">
+
+                      <ion-select-option value=",">,</ion-select-option>
+                      <ion-select-option value="|">|</ion-select-option>
+                      <ion-select-option value=":">:</ion-select-option>
+                      <ion-select-option value=";">;</ion-select-option>
+                      <ion-select-option value="-">-</ion-select-option>
+                      <ion-select-option value="  ">Tab</ion-select-option>
+                      <ion-select-option value="Others">Others</ion-select-option>
+
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+          
+          <ion-item *ngIf="isOthers" fill="outline" color="primary">
+            <ion-grid>
+              <ion-row>
+
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> 
+                      Enter the Field Separator
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item fill="outline" color="primary">              
+                    <ion-input (ionChange)="otherSeparatorEvent($event)" 
+                      type="text" value="" placeholder="Enter the Field Separator">
+                    </ion-input>  
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+      
+          <ion-item *ngIf="isQualifier" fill="outline" color="primary" >
+            <ion-grid>
+              <ion-row>
+              
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> 
+                      Enter Qualifier 
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item fill="outline" color="primary">
+                    <ion-input (ionChange)="qualifierEvent($event)" type="text"
+                     value="" placeholder="Enter Qualifier">
+                    </ion-input>  
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+
+          <ion-item fill="outline" color="primary">
+            <ion-grid>
+              <ion-row>
+              
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> 
+                      
+                      Download Directory 
+                    </ion-label>
+                  </h6>
+                </ion-col>
+                
+
+                <ion-col>
+                  <ion-item fill="outline" color="primary">
+                    <ion-input (ionChange)="directoryEvent($event)" type="text"
+                     value=""[(ngModel)]="this.directory" >
+                     
+                    </ion-input>  
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+
+        </ion-card>    
+
+        <ion-row>
+
+          <ion-col sizeLg="3">
+            <ion-button color="custom" (click)="back()" expand="full" 
+              size="large" shape="round">Reset
+            </ion-button>
+          </ion-col>
+
+          <ion-col sizeLg="6">
+            <ion-button color="custom" (click)="save()" expand="full" 
+              size="large" shape="round">Save & Download
+            </ion-button>
+          </ion-col>
+
+          <ion-col sizeLg="3"> 
+            <ion-button color="custom" (click)="onDownload()" expand="full" 
+              size="large" shape="round">DOWNLOAD
+            </ion-button>
+          </ion-col>
+                              
+        </ion-row>
+        
+      </ion-col>        
+    </ion-row>        
+  </ion-content>
+
+  <ion-footer id="footer" class="footer text-muted">
+    Copyright © 2022 Analytics. All rights reserved.
+  </ion-footer>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -->
+
+
+ <body>
+  <ion-header [translucent]="true"> 
+    <ion-toolbar color="custom">  
+
+      <ion-buttons icon only clear class="round" (click)="showSearch()" 
+        color="#0070ad" size="small">&nbsp;
+        <ion-icon name="list-outline" size="large"></ion-icon>
+      </ion-buttons>
+
+      <ion-title class="ion-text-center">
+        <ion-icon name="cloud-download"></ion-icon>
+          &nbsp;Download Page&nbsp;
+        <ion-icon name="cloud-download"></ion-icon>
+      </ion-title>  
+
+      <ion-buttons slot="start">
+        <ion-back-button color="#fff" defaultHref="choose-options"></ion-back-button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </ion-buttons> 
+
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="ion-text-center" color="#f7f7f7">
+    <br> 
+
+    <ion-item *ngIf="showSearchBar" class="sidenav" color="#0070ad">
+      <ion-col>
+        <ion-row>
+          <h4>
+            <ion-icon name="analytics-outline" size="large"></ion-icon>
+            <a href="download-dashboard"><b>Dashboard</b></a>
+          </h4>
+        </ion-row>
+
+        <ion-row>
+          <h4>
+            <ion-icon name="analytics-outline" size="large"></ion-icon>
+            <a href="download-log"><b>Download Log</b></a>
+          </h4>
+        </ion-row>
+
+      </ion-col>
+    </ion-item>
+
+    <ion-row>
+      <ion-col sizeLg="6" offsetLg="3" >         
+        <ion-card > 
+
+          <ion-item fill="outline">
+            <ion-grid>
+              <ion-row>
+
+                <ion-col>
+                  <h6>
+                    <ion-label >
+                      <span class="required">*</span> 
+                      Select Database
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col >
+                  <ion-item fill="outline"  [ngStyle]="{ '--border-color':isSubmitted==true && selectedDatabase==''? 'red' : 'black'}">
+                    <ion-select (ionChange)="DatabaseSelectEvent($event)"
+                    
+                      name="database"  multiple="false" placeholder="Select Database">
+
+                      <ion-select-option 
+                        *ngFor="let db of databases" [value]="db.id">{{db}}
+                      </ion-select-option>
+
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+           
+          <ion-item fill="outline">
+            <ion-grid>
+              <ion-row>
+              
+                <ion-col>
+                  <h6>
+                    <ion-label > 
+                      <span class="required">*</span> 
+                      Select Schema
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col >
+                  <ion-item fill="outline" [ngStyle]="{ '--border-color':isSubmitted==true && selectedSchema==''? 'red' : 'black'}">
+                    <ion-select (ionChange)="SchemaSelectEvent($event)"  
+                      name="schema" multiple="false" placeholder="Select Schema">
+
+                      <ion-select-option 
+                        *ngFor="let db of schemas" [value]="db.id">{{db}}
+                      </ion-select-option>
+
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+            
+          <ion-item fill="outline">
+            <ion-grid>
+              <ion-row>
+
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> 
+                      Select Tables or Views
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item fill="outline" [ngStyle]="{ '--border-color':isSubmitted==true && selectedTable==''? 'red' : 'black'}">
+                    <ionic-selectable [(ngModel)]="selectTable" 
+                      placeholder = "Select Table/ View" [items]="this.tables" 
+                      (onChange)="tableSelectEvent($event)" [canSearch]="true" 
+                      [isMultiple]="true" closeButtonText="X" closeButtonSlot="end">
+
+                      <ng-template ionicSelectableTitleTemplate>
+                        Select Tables  
+                      </ng-template>  
+
+                      <ng-template ionicSelectableCloseButtonTemplate>
+                        <ion-icon name="close-circle" 
+                          style="font-size: 35px; color: #cc0c16">
+                        </ion-icon>
+                      </ng-template> 
+
+                    </ionic-selectable>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+
+          <ion-item fill="outline">
+            <ion-grid>
+              <ion-row>
+              
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> 
+                      Select File Format
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item fill="outline" [ngStyle]="{ '--border-color':isSubmitted==true && selectedFileType==''? 'red' : 'black'}">
+                    <ion-select (ionChange)="fileTypeEvent($event)" 
+                      [value]="selectedFileType" multiple="false" placeholder="Select File Format">
+
+                      <ion-select-option value="csv">CSV</ion-select-option>
+                      <ion-select-option value="xls">Excel</ion-select-option>
+                      <ion-select-option value="tsv">TSV</ion-select-option>
+                      <ion-select-option value="json">JSON</ion-select-option>
+                      <ion-select-option value="txt">TEXT</ion-select-option>
+
+                    </ion-select>
+
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+         
+          <ion-item *ngIf="isSeparator" fill="outline">
+            <ion-grid>
+              <ion-row>
+
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> 
+                      Select Field Separator
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item  fill="outline" [ngStyle]="{ '--border-color':isSubmitted==true && selectedSeparator==''? 'red' : 'black'}">
+                    <ion-select (ionChange)="seperatorTypeEvent($event)"  
+                      value="" multiple="false" placeholder="Select Separator">
+
+                      <ion-select-option value=",">,</ion-select-option>
+                      <ion-select-option value="|">|</ion-select-option>
+                      <ion-select-option value=":">:</ion-select-option>
+                      <ion-select-option value=";">;</ion-select-option>
+                      <ion-select-option value="-">-</ion-select-option>
+                      <ion-select-option value="  ">Tab</ion-select-option>
+                      <ion-select-option value="Others">Others</ion-select-option>
+
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+          
+          <ion-item *ngIf="isOthers" fill="outline">
+            <ion-grid>
+              <ion-row>
+
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> 
+                      Enter the Field Separator
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item fill="outline" [ngStyle]="{ '--border-color':isSubmitted==true && selectedSeparator==''? 'red' : 'black'}">              
+                    <ion-input (ionChange)="otherSeparatorEvent($event)" 
+                      type="text" value="" placeholder="Enter the Field Separator">
+                    </ion-input>  
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+      
+          <ion-item *ngIf="isQualifier" fill="outline" >
+            <ion-grid>
+              <ion-row>
+              
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> 
+                      Enter Qualifier 
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item fill="outline">
+                    <ion-input (ionChange)="qualifierEvent($event)" type="text"
+                     value="" placeholder="Enter Qualifier">
+                    </ion-input>  
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+
+          <ion-item fill="outline" >
+            <ion-grid>
+              <ion-row>
+              
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <!-- <span class="required">*</span>  -->
+                      
+                      Download Directory 
+                    </ion-label>
+                  </h6>
+                </ion-col>
+                
+
+                <ion-col>
+                  <ion-item fill="outline">
+                    <ion-input (ionChange)="directoryEvent($event)" type="text"
+                     value="" [(ngModel)]="this.directory" >
+                     
+                    </ion-input>  
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+
+        </ion-card>    
+
+        <ion-row>
+
+          <ion-col sizeLg="3">
+            <ion-button color="custom" (click)="back()" expand="full" 
+              size="large" shape="round">Reset
+            </ion-button>
+          </ion-col>
+
+          <ion-col sizeLg="6">
+            <ion-button color="custom" (click)="save()" expand="full" 
+              size="large" shape="round">Save & Download
+            </ion-button>
+          </ion-col>
+
+          <ion-col sizeLg="3"> 
+            <ion-button color="custom" (click)="onDownload()" expand="full" 
+              size="large" shape="round">DOWNLOAD
+            </ion-button>
+          </ion-col>
+                              
+        </ion-row>
+        
+      </ion-col>        
+    </ion-row>        
+  </ion-content>
+
+  <ion-footer id="footer" class="footer text-muted">
+    Copyright © 2022 Analytics. All rights reserved.
+  </ion-footer>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

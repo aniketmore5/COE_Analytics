@@ -1,0 +1,397 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="custom">
+    <ion-title class="ion-text-center">
+      <ion-icon name="create-outline"></ion-icon>
+      View Creation Page
+      <ion-icon name="create-outline"></ion-icon>
+    </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="#fff" defaultHref="choose-options"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true" overflow-scroll="true">
+  <br><br>
+  <form [formGroup]="ionicForm" (ngSubmit)="submitForm()" novalidate>
+    <ion-grid class="gridA">
+      <ion-row>
+        <ion-col sizeLg="6" offsetLg="3">
+          <ion-card>
+            <ion-item fill="outline">
+              <ion-grid><ion-row>
+                  <ion-col>
+                    <h6><ion-label>View Name</ion-label></h6>
+                  </ion-col>
+                  <ion-col><ion-item fill="outline">
+                      <ion-textarea rows="1" [clearOnEdit]="true" [(ngModel)]="viewName" formControlName="name"
+                        type="text" [required]="true" placeholder="Enter view name"></ion-textarea></ion-item>
+                  </ion-col>
+                </ion-row></ion-grid>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="(isSubmitted||isPrimaryDone) && errorControl.name.errors?.required">
+              <br>
+              Name is required
+              
+            </span>
+            <span class="error ion-padding" *ngIf="(isSubmitted||isPrimaryDone) && errorControl.name.errors?.pattern"><br>
+              Please provide valid name. 
+              Name should contain only alphanumeric characters and underscore.
+               Spaces and special characters not allowed!
+            </span>
+            <ion-item fill="outline">
+              <ion-grid><ion-row>
+                  <ion-col>
+                    <h6><ion-label>Select Primary Database Name</ion-label></h6>
+                  </ion-col>
+                  <ion-col><ion-item fill="outline">
+                    
+                   
+                      <ion-select [(ngModel)]="selecteddb" formControlName="db" [required]="true"
+                        (ionChange)="DatabaseSelectEvent($event)" multiple="false" placeholder="Select Database">
+                     
+                        <ion-select-option *ngFor="let db of databases"
+                          [value]="db.id">{{db.Database}}</ion-select-option>
+                     
+                      </ion-select>
+                      
+                   
+                    </ion-item></ion-col></ion-row>
+              </ion-grid>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="(isSubmitted||isPrimaryDone) && errorControl.db.errors?.required"><br>
+              Database required
+            </span>
+            <ion-item fill="outline">
+              <ion-grid><ion-row>
+                  <ion-col>
+                    <h6><ion-label>Select Primary Table Name </ion-label></h6>
+                  </ion-col>
+                  <ion-col><ion-item fill="outline">
+                      <ion-select [(ngModel)]="selectedtable" formControlName="tab" [required]="true"
+                        (ionChange)="tbSelectEvent($event)" multiple="false" placeholder="Select table name">
+                        <ion-select-option *ngFor="let t of tabs" [value]="t.id"> {{t}} </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-col></ion-row>
+              </ion-grid>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="(isSubmitted||isPrimaryDone) && errorControl.tab.errors?.required"><br>
+              Table Name required
+            </span>
+            <ion-item fill="outline">
+              <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    <h6><ion-label>Select columns you want to include</ion-label></h6>
+                  </ion-col>
+                  <ion-col><ion-item fill="outline" selectAllWithButtonDirective>
+                      <ion-select [(ngModel)]="selectedcolumns"  formControlName="column" multiple="true"
+                        placeholder="Select include columns" multiple="true">
+                        <ion-select-option [value]="option" *ngFor="let option of items">{{option}}</ion-select-option>
+                      </ion-select>
+                    </ion-item></ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+            <span class="error ion-padding" *ngIf="(isSubmitted||isPrimaryDone) && errorControl.column.errors?.required"><br>
+               Columns required
+            </span>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6"></ion-col>
+        <ion-col size="3">
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <div style="display: flex; justify-content: center;">
+      <ion-button size="medium" shape="round" icon-only title="click to add more join condition" (click)="addJoin()">ADD
+        JOIN
+      </ion-button>
+    </div>
+    <form  [formGroup]="myJoin" (ngSubmit)="onSubmit()">
+      <ng-container formArrayName="join">
+        <br>
+        <ion-grid class="filter" fill="outline" *ngFor="let join of join().controls; let joinIndex=index"
+          [formGroupName]="joinIndex">
+          <ion-row>
+            <ion-col></ion-col>
+            <ion-col size="4">
+              <ion-label>Select Secondary database name</ion-label>
+              <ion-item fill="outline">
+                <ion-select formControlName="secondary_database" class="form-control"
+                  (ionChange)="SecDatabaseSelectEvent($event)" multiple="false" placeholder="Select Database">
+                  <ion-select-option *ngFor="let db of databases" [value]="db.id">{{db.Database}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <span class="error ion-padding" *ngIf="(isSubmitted||isPrimaryDone) && join.controls.secondary_database.errors?.required">
+                Database required
+              </span><br>
+   
+              <ion-label>Select Secondary Table Name </ion-label>
+              <ion-item fill="outline">
+                <ion-select   formControlName="secondary_table" class="form-control"
+                  (ionChange)="sectableSelectEvent($event)" multiple="false" placeholder="Select table name">
+                  <ion-select-option *ngFor="let t of sectable" [value]="t.id"> {{t}} </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <span class="error ion-padding" *ngIf="(isSubmitted||isPrimaryDone) && join.controls.secondary_table.errors?.required">
+                Table required
+              </span>
+             
+              <br>
+              <ion-label>Select Columns you want to include </ion-label>
+              <ion-item fill="outline" selectAllWithButtonDirective>
+                <ion-select formControlName="include_columns" class="form-control"
+                  multiple="true" placeholder="Select include columns ">
+                  <ion-select-option *ngFor="let c of seccols" [value]="c"> {{c}} </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <span class="error ion-padding" *ngIf="(isSubmitted||isPrimaryDone) && join.controls.include_columns.errors?.required">
+                Columns required
+              </span>
+            </ion-col>
+            <ion-col></ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="4"></ion-col>
+            <ion-col size="4">
+              <ion-label>Type of Join </ion-label>
+              <ion-item fill="outline">
+                <ion-select formControlName="join_type" class="form-control" (ionChange)="onCondnSelectEvent($event)"
+                  multiple="false" placeholder="Select Type of join ">
+                  <ion-select-option value="INNER JOIN">Inner join</ion-select-option>
+                  <ion-select-option value="LEFT JOIN">Left outer join</ion-select-option>
+                  <ion-select-option value="RIGHT JOIN">Right outer join</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <span class="error ion-padding" *ngIf="(isSubmitted||isPrimaryDone) && join.controls.join_type.errors?.required">
+                Type required
+              </span>
+             
+            </ion-col>
+            <ion-col size="3">
+              <div style="display: flex; justify-content: center;">
+                <ion-button size="medium" shape="round" icon-only title="click to add more on condition"
+                  (click)="addOnCondition(joinIndex)">
+                  <ion-icon name="add"></ion-icon>
+                </ion-button>
+              </div>
+              <span class="error ion-padding" *ngIf="(isSubmitted||isPrimaryDone) && join.controls.onCondition.errors?.required">
+                Atleast one ON condition required
+              </span>
+            </ion-col>
+          </ion-row>
+         
+          <br>
+          <ng-container formArrayName="onCondition">
+            <ng-container *ngFor="let skill of onCondn(joinIndex).controls; let onIndex=index">
+              <ng-container [formGroupName]="onIndex">
+                <ion-row>
+                  <ion-col *ngIf="onIndex>=1" offsetLg="1" size="3">
+                    <ion-label>Select Condition </ion-label>
+                    <ion-item fill="outline">
+                      <ion-select *ngIf="onIndex>=1" formControlName="condition" class="form-control" 
+                        multiple="false" placeholder="Select condition ">
+                        <ion-select-option value="AND">and</ion-select-option>
+                        <ion-select-option value="OR">or</ion-select-option>
+                      </ion-select></ion-item>
+                      <span class="error ion-padding" *ngIf="(isSubmitted||isPrimaryDone) && skill.controls.condition.errors?.required">
+                        Condition required
+                      </span>
+                  </ion-col>
+                  <ion-col *ngIf="onIndex==0" offsetLg="1" size="3">
+                  </ion-col>
+                 
+                  <ion-col size="3">
+                    <ion-label>Select first Table Name </ion-label>
+                    <ion-item fill="outline">
+                      <ion-select formControlName="table_1" class="form-control"
+                        (ionChange)="firsttableSelectEvent($event)" multiple="false"
+                        placeholder="Select first table name">
+                        <ion-select-option *ngFor="let t of jointables" [value]="t.id"> {{t}} </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                    <span class="error ion-padding" *ngIf="(isSubmitted||isPrimaryDone) && skill.controls.table_1.errors?.required">
+                      Table required
+                    </span>
+                    <br>
+                    <ion-label>Select second Table Name </ion-label>
+                    <ion-item fill="outline">
+                      <ion-select  formControlName="table_2" class="form-control"
+                        (ionChange)="secondtableSelectEvent($event)" multiple="false"
+                        placeholder="Select second table name">
+                        
+                        <ion-select-option *ngFor="let t of jointables" [value]="t.id"> {{t}} </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                    <span class="error ion-padding" *ngIf="(isSubmitted||isPrimaryDone) && skill.controls.table_2.errors?.required">
+                      Table  required
+                    </span>
+                  </ion-col>
+                  <ion-col size="3">
+                    <ion-label>Select First Column Name </ion-label>
+                    <ion-item fill="outline">
+                      <ion-select  formControlName="column_1" class="form-control"
+                         multiple="false" placeholder="Select column ">
+                        <ion-select-option *ngFor="let c of col1" [value]="c"> {{c}} </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                    <span class="error ion-padding" *ngIf="(isSubmitted||isPrimaryDone) && skill.controls.column_1.errors?.required">
+                      Column  required
+                    </span> <br>
+                    
+                    <ion-label>Select Second Column Name </ion-label>
+                    <ion-item fill="outline">
+                      <ion-select  formControlName="column_2" class="form-control"
+                         multiple="false" placeholder="Select column ">
+                        <ion-select-option *ngFor="let c of col2" [value]="c"> {{c}} </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                    <span class="error ion-padding" *ngIf="(isSubmitted||isPrimaryDone) && skill.controls.column_2.errors?.required">
+                      Column required
+                    </span>
+                  </ion-col>
+                  <ion-col>
+                    <ion-button class="remove" title="click to remove on condition" size="medium" shape="round"
+                      (click)="removeOnCondition(joinIndex,onIndex)">
+                      <ion-icon name="trash"></ion-icon>
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+              </ng-container></ng-container>
+          </ng-container>
+          <ion-row class="ion-justify-content-center">
+            <ion-button class="remove" title="click to remove join condition" size="medium" shape="round"
+              (click)="removejoin(joinIndex)">
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
+          </ion-row>
+          <br>
+        </ion-grid>
+      </ng-container>
+      <br>
+    </form>
+    <div style="display: flex; justify-content: center;">
+      <ion-button size="medium" title="click to add more filter condition" shape="round" (click)="addFilter()">Add
+        filter</ion-button>
+    </div>
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+      <ng-container formArrayName="filter">
+        <ng-container *ngFor="let filter of filter().controls; let i=index" [formGroupName]="i">
+          <ion-grid class="filter">
+            <ion-row>
+              <br>
+            </ion-row>
+            <ion-row> <ion-col *ngIf="i>=1" size="2">
+                <ion-label>Condition</ion-label>
+                <br>
+                <ion-item fill="outline">
+                  <ion-select *ngIf="i>=1" formControlName="condition" class="form-control" 
+                     multiple="false" placeholder="Select condition ">
+                    <ion-select-option value="AND">and</ion-select-option>
+                    <ion-select-option value="OR">or</ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <span class="error ion-padding" *ngIf="isSubmitted && filter.controls.condition.errors?.required">
+                  Condition required
+                </span>
+                </ion-col>
+                <ion-col *ngIf="i==0" size="2"></ion-col>
+             
+ <ion-col size="2">
+                <ion-label>Select table</ion-label>
+                <br>
+                <ion-item fill="outline">
+                  <ion-select formControlName="table" class="form-control" (ionChange)="filtertbSelectEvent($event)"
+                    multiple="false" placeholder="Select table name">
+                    <ion-select-option *ngFor="let t of filtertable" [value]="t.id"> {{t}} </ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <span class="error ion-padding" *ngIf="isSubmitted && filter.controls.table.errors?.required">
+                  Table required
+                </span>
+              </ion-col><ion-col size="2">
+                <ion-label>Select Column name</ion-label>
+                <br>
+                <ion-item fill="outline">
+                  <ion-select formControlName="column" class="form-control" 
+                    multiple="false" placeholder="Select column ">
+                    <ion-select-option *ngFor="let c of filtercol" [value]="c.id"> {{c}}</ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <span class="error ion-padding" *ngIf="isSubmitted && filter.controls.column.errors?.required">
+                  Column required
+                </span>
+              </ion-col><ion-col size="2">
+                <ion-label>Operator</ion-label>
+                <br>
+                <ion-item fill="outline">
+                  <ion-select formControlName="operator" class="form-control"
+                    multiple="false" placeholder="Select Operator ">
+                    <ion-select-option value=">"> > </ion-select-option>
+                    <ion-select-option value="<">< </ion-select-option>
+                        <ion-select-option value="=">=</ion-select-option>
+                        <ion-select-option value=">=">>=</ion-select-option>
+                        <ion-select-option value="<="><=</ion-select-option>
+                          <ion-select-option value="<>"><></ion-select-option>
+                            <ion-select-option value="!=">!=</ion-select-option>
+                            <ion-select-option value="LIKE">LIKE</ion-select-option>
+                            <ion-select-option value="BETWEEN">BETWEEN</ion-select-option>
+                            <ion-select-option value="IS">IS</ion-select-option>
+                            <ion-select-option value="IN">IN</ion-select-option>
+                            <ion-select-option value="NOT LIKE">NOT LIKE</ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <span class="error ion-padding" *ngIf="isSubmitted && filter.controls.operator.errors?.required">
+                  Operator required
+                </span>
+              </ion-col><ion-col size="2">
+                <ion-label fill="outline">Criteria</ion-label>
+                <br>
+                <ion-item fill="outline">
+                  <ion-textarea [autoGrow]="true" type="text" formControlName="criteria" autogrow=true
+                    class="form-control" rows="1" placeholder="Enter criteria"></ion-textarea>
+                </ion-item>
+                <span class="error ion-padding" *ngIf="isSubmitted && filter.controls.criteria.errors?.required">
+                  Criteria required
+                </span>
+              </ion-col><ion-col>
+                <div style="display: flex; justify-content: center;">
+                  <ion-button class="remove" size="medium" title="click to remove filter condition" shape="round"
+                    (click)="removeFilter(i)"> <ion-icon name="trash"></ion-icon></ion-button>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ng-container>
+      </ng-container>
+      <br>
+    </form>
+    <ion-grid fill="outline">
+      <ion-row class="ion-justify-content-center">
+        <ion-button size="medium" title="click to check your view script" shape="round" (click)="ViewScript()">View
+          Script</ion-button>
+      </ion-row>
+      <ion-row class="ion-justify-content-center" *ngIf="ShowScript">
+        <ion-col size="10">
+          <ion-textarea rows="1" [autoGrow]="true" [readonly]="true"
+            class="condition cust">{{this.myScript}}</ion-textarea>
+        </ion-col>
+      </ion-row>
+      <br><br>
+      <ion-row class="ion-justify-content-center">
+        <ion-button size="medium" title="click to submit" shape="round" class="btn" type="submit" *ngIf="!isUrlSet"
+          shape="round">
+          Create view
+        </ion-button>
+      </ion-row>
+    </ion-grid>
+  </form>
+  <ion-grid>
+    <ion-footer id="footer" class="footer text-muted">
+      Copyright © 2010-2019 ForgeRock AS. All rights reserved.
+    </ion-footer>
+  </ion-grid>
+</ion-content>

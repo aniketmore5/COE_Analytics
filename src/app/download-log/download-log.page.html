@@ -1,0 +1,50 @@
+<body><ion-header [translucent]="true">
+  <ion-toolbar color="custom">
+    <ion-title class="ion-text-center">
+      <ion-icon name="cellular-outline" size="large"></ion-icon>&nbsp; Download Log &nbsp;
+      <ion-icon name="cellular-outline" size="large"></ion-icon> </ion-title>
+    <ion-buttons slot="start"> 
+      <ion-back-button
+        color="#fff"
+        defaultHref="home"
+      ></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content><br/>
+  <ion-row>
+    <ion-col sizeLg="10" offsetLg="1">
+      <ion-card>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>User Name</th>
+              <th>Database Name</th>
+              <th>Schema Name</th>
+              <th>Table Name</th>
+              <th>Status</th>
+              <th>Description</th>
+              <th>Capture Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of log_value">
+              <td>{{record.ID}}</td>
+              <td>{{record.UserName}}</td>
+              <td>{{record.DatabaseName}}</td>
+              <td>{{record.SchemaName}}</td>
+              <td>{{record.TableName}}</td>
+              <td>{{record.Status}}</td>
+              <td>{{record.Description}}</td>
+              <td>{{record.CaptureDate}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </ion-card></ion-col
+    ></ion-row>
+</ion-content>
+<ion-footer id="footer" class="footer text-muted">
+  Copyright © 2022 Analytics. All rights reserved.
+</ion-footer>
+</body>

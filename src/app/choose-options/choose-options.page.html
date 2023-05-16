@@ -1,0 +1,96 @@
+
+<header>
+  <body>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <nav class="navbar navbar-expand-md navbar navbar-dark" style="background-color: #2568ab;">
+    <div class="container-fluid">
+      <ion-buttons slot="start" >
+        <ion-back-button color="#fff" defaultHref="auth"></ion-back-button>
+      </ion-buttons>
+
+      
+  
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-4 mb-md-0">
+         
+         
+          
+         
+         <br>
+          <li class="nav-item">
+            <a class="nav-link" href="upload">&nbsp;Upload &nbsp;&nbsp;</a>
+          </li>
+          <br>
+          <li class="nav-item">
+            <a class="nav-link" href="home">&nbsp;Download &nbsp;&nbsp;</a>
+          </li>
+          <br>
+          <li class="nav-item">
+            <a class="nav-link" href="view">&nbsp;Create view</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="table">&nbsp;Create table</a>
+          </li>
+     
+          
+        </ul>
+         </div>
+     </div>
+  </nav>
+  <ion-card class="custom">
+    <ion-card-header>
+    <ion-card-title class="ion-text-center">Analytics Web App - User Manual</ion-card-title>
+    </ion-card-header>
+
+  <ion-card >
+    <ion-card-title class="ion-text-center">Download Page</ion-card-title>
+    <h6><ion-card-content class="ion-text-center">
+       In this Page, the user can download table or view data from the database in the server
+    </ion-card-content></h6>
+      <div class="container">
+      <div class="image">
+        <img src="https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990406_960_720.png">
+        <!--img src="https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990405__340.png"-->
+      </div>
+      <div class="text">
+        <ul>
+          <li><b>Select Database : </b>User can select the database from which he want to download files. The list of available database in the server will be visible in the dropdown </li>
+          <li><b>Select Tables or Views : </b>The list of tables and views available in the selected database will be visible here. The user can select the tables or views that he wants to download </li>
+          <li><b>Select File Format : </b>The user can select the file format. The available file formats are CSV, TSV, Excel, JSON, Txt </li>
+          <li><b>Select Separator : </b>This tab will appear if the user selected txt format. The available separators are "," , "\t" , "|" , ":" , ";" , "-". The user can also input their own separator</li>
+          <li><b>Select Qualifier : </b>This tab will appear if the user selected CSV, TSV or Text format. The user can input their qualifier</li>
+          <br><ul>
+            <li><h6><b>DOWNLOAD - </b>Download the files into the Downloads folder </h6></li>
+            <li><h6><b>SAVE & DOWNLOAD - </b>A pop-up will appear where the user can input any name and can download the files </h6></li>
+            <li><h6><b>DASHBOARD - </b>It contains the details of the User Download history. If the user wants to download the same set of files in the future he can download it from the dashboard   </h6></li>
+          </ul>
+        </ul> 
+      </div>  
+    </div>
+  </ion-card>
+  <ion-card >
+    <ion-card-title class="ion-text-center">Upload Page</ion-card-title>
+    <h6><ion-card-content class="ion-text-center">
+    In this Page, the user can upload data files to the tables in the database of the server
+    </ion-card-content></h6>
+      <div class="container">
+      <div class="image">
+        <img src="https://cdn.pixabay.com/photo/2017/01/18/17/39/cloud-computing-1990405__340.png">
+      </div>
+      <div class="text">
+        <ul>
+          <li><b>Select Database : </b>User can select the database to which he want to upload files. The list of available database in the server will be visible in the dropdown </li>
+          <li><b>Select Table : </b>The list of tables and views available in the selected database will be visible here. The user can select the table to which he wants to upload the file. The file formats that are supported are CSV, TSV, Excel, JSON, Txt </li>
+          <li><b>Select Qualifier : </b>The qualifier use in the input file should be specified here</li>
+        </ul> 
+      </div>  
+    </div>
+  </ion-card>  
+  </ion-card>
+
+<footer id="footer" class="footer" color="black">
+  Copyright © 2022 Analytics. All rights reserved.
+</footer>
+</body>
+</header>
+  

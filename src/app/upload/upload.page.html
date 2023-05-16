@@ -1,0 +1,428 @@
+<body>
+  <ion-header [translucent]="true">
+    <ion-toolbar color="custom">
+      
+      <ion-buttons icon only clear 
+        class="round" (click)="log()" color="#0070ad" size="small" icon-only title="click to view the upload log ">&nbsp;
+        <ion-icon name="list-outline" size="large"></ion-icon>
+      </ion-buttons>
+
+      <ion-title class="ion-text-center">
+        <ion-icon name="cloud-upload"></ion-icon>
+        &nbsp; Upload Page &nbsp;
+        <ion-icon name="cloud-upload"></ion-icon>
+      </ion-title>
+
+      <ion-buttons slot="start">
+        <ion-back-button color="#fff" 
+          defaultHref="choose-options">
+        </ion-back-button>
+      </ion-buttons>
+
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content class="ion-text-center" color="#f7f7f7">
+    
+    <ion-row>
+      
+      <ion-col sizeLg="6" offsetLg="3">
+        
+        <ion-card >
+          
+          <ion-item fill="outline">
+            <ion-grid >    
+              <ion-row>
+                
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> Choose File 
+                    </ion-label>
+                  </h6>
+                </ion-col>
+                
+                <ion-col>
+                  <ion-button icon-only title="click to select the file you want to upload "
+                    color="tertiary" size="medium" (click)="chooseFile()">
+                    <ion-icon name="folder-outline"></ion-icon>&nbsp; File Explorer
+                  </ion-button>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>  
+
+          <ion-item fill="outline">
+            <ion-grid>
+              <ion-row>
+
+                <ion-col>
+                  <h6>
+                    <ion-label >
+                      <span class="required">*</span> 
+                      Select Database
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col >
+                  <ion-item fill="outline"  [ngStyle]="{ '--border-color':isSubmitted==true && selectedDatabase==''? 'red' : 'black'}">
+                    <ion-select (ionChange)="DatabaseSelectEvent($event)" 
+                      name="database"   multiple="false" placeholder="Select Database">
+
+                      <ion-select-option 
+                        *ngFor="let db of databases" [value]="db.id">{{db}}
+                      </ion-select-option>
+
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+
+          <ion-item fill="outline">
+            <ion-grid>
+              <ion-row>
+              
+                <ion-col>
+                  <h6>
+                    <ion-label > 
+                      <span class="required">*</span> 
+                      Select Schema
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col >
+                  <ion-item fill="outline" [ngStyle]="{ '--border-color':isSubmitted==true && selectedSchema==''? 'red' : 'black'}">
+                  <ion-select (ionChange)="SchemaSelectEvent($event)"  
+                      name="schema" multiple="false" placeholder="Select Schema">
+
+                      <ion-select-option 
+                        *ngFor="let db of schemas" [value]="db.id">{{db}}
+                      </ion-select-option>
+
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+
+          <ion-item fill="outline">
+            <ion-grid>
+              <ion-row>
+
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> 
+                      Select Tables
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item fill="outline" [ngStyle]="{ '--border-color':isSubmitted==true && selectedTable==''? 'red' : 'black'}">
+
+                  <ionic-selectable [(ngModel)]="selectTable" 
+                      placeholder = "Select Table/ View" [items]="this.tables" 
+                      (onChange)="tableSelectEvent($event)" [canSearch]="true" 
+                       closeButtonText="X" closeButtonSlot="end">
+
+                      <ng-template ionicSelectableTitleTemplate>
+                        Select Table  
+                      </ng-template>  
+
+                      <ng-template ionicSelectableCloseButtonTemplate>
+                        <ion-icon name="close-circle" 
+                          style="font-size: 35px; color: #cc0c16">
+                        </ion-icon>
+                      </ng-template> 
+
+                    </ionic-selectable>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+
+          <!--ion-item fill="outline">
+            <ion-grid>
+              <ion-row>
+
+                <ion-col
+                  ><h6>
+                    <ion-label>
+                      <span class="required">*</span> Select Table
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item fill="outline">
+                    <ion-select (ionChange)="tableSelectEvent($event)" 
+                      [value]="selectedTable" multiple="false" placeholder="Select Table">
+                      
+                      <ion-select-option *ngFor="let t of tables" 
+                      [value]="t">{{t}}
+                      </ion-select-option>
+
+                      <ion-select-option value="Others"
+                        >Others
+                      </ion-select-option>
+
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+          </ion-item-->
+
+          <ion-item fill="outline" *ngIf="createTable">
+            <ion-grid>
+              <ion-row>
+                
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> Enter Table Name 
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item fill="outline">
+                    <ion-input type="text" [value]="newTableName" 
+                      placeholder="Enter Table Name" (ionChange)="newTableSelect($event)">
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row> 
+            </ion-grid>
+          </ion-item>
+
+          <ion-item fill="outline" *ngIf="this.textfile">
+            <ion-grid>
+              <ion-row>
+
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> Enter Seperator 
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item fill="outline">
+                    <ion-input (ionChange)="seperatorEvent($event)" type="text"
+                      value="" placeholder="Enter Seperator">
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row> 
+            </ion-grid>
+          </ion-item>
+
+          <ion-item fill="outline" *ngIf="xlsfile">
+            <ion-grid>
+              <ion-row>
+                
+                <ion-col>
+                  <h6>
+                    <ion-label>
+                      <span class="required">*</span> Enter Qualifier 
+                    </ion-label>
+                  </h6>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item fill="outline">
+                    <ion-input (ionChange)="qualifierEvent($event)" type="text"
+                      value=""placeholder="Enter Qualifier">
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+
+              </ion-row> 
+            </ion-grid>
+          </ion-item>
+
+          <ion-item fill="outline" *ngIf="createTable">
+            <ion-grid>    
+              <ion-row class="ion-justify-content-center">
+                  <ion-button class="myclass" icon-only title="click to create a new table "
+                    size="medium" shape="round" id="show-columns" (click)="showColumns()">
+                    Create Table
+                  </ion-button>                              
+              </ion-row> 
+            </ion-grid>
+          </ion-item>
+
+          <ion-item fill="outline">
+            <ion-grid>    
+              <ion-row class="ion-justify-content-center">
+                <ion-button class="myclass" icon-only title="click to preview the file data"
+                  size="medium" shape="round" id="show-data" (click)="previewTable()">
+                  Preview Data
+                </ion-button>
+              </ion-row>
+            </ion-grid>   
+          </ion-item>
+
+        </ion-card>
+
+        <ion-button icon-only title="click to upload the file " color="custom"
+          (click)="upload()" expand="block" size="large" shape="round">
+          UPLOAD
+        </ion-button>
+
+      </ion-col>
+
+    </ion-row>
+
+    <ion-modal #modal *ngIf="this.file!=='' && this.createTable == true && this.    selectedDatabase !=='' && this.newTableName!=='' && this.db_table == '' " trigger="show-columns">
+      <ng-template>
+        <ion-content class="ion-text-center">
+          
+          <ion-toolbar>
+            <ion-title>Columns</ion-title>
+
+            <ion-buttons slot="start">
+              <ion-button class="myButton" icon-only title="refresh" 
+                (click)="refresh()" shape="round">
+                <ion-icon name="refresh-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+
+            <ion-buttons slot="end">
+              <ion-button class="myButton" icon-only title="close" 
+                (click)="modal.dismiss()" (click)="dismiss()" shape="round">
+                X
+              </ion-button>
+            </ion-buttons>
+
+          </ion-toolbar>
+
+          <ion-card fill="outline">
+            <ion-item fill="outline" *ngFor="let column of columns; index as i">
+              <ion-grid>
+                <ion-row class="ion-justify-content-center">
+  
+                  <ion-col sizeLg="3.8">
+                    <ion-item fill="outline" >
+                      <ion-textarea autogrow="true" type="text" placeholder="Column {{i + 1}}"
+                        [(ngModel)]="column.name" required>
+                      </ion-textarea>
+                    </ion-item>
+                  </ion-col>
+  
+                  <ion-col>
+                    <ion-item fill="outline">
+                      <ion-select [(ngModel)]="column.type" name="database" multiple="false"
+                        placeholder="Datatype"(ionChange)="datatypeEvent($event)">
+                        
+                        <ion-select-option value="char">char</ion-select-option>
+                        <ion-select-option value="varchar">varchar</ion-select-option>
+                        <ion-select-option value="int">int</ion-select-option>
+                        <ion-select-option value="decimal">decimal</ion-select-option>
+                        <ion-select-option value="date">date</ion-select-option>
+                        <ion-select-option value="datetime">datetime</ion-select-option>
+
+                      </ion-select>
+                    </ion-item>                  
+                  </ion-col>
+  
+                  <ion-col sizeLg="2.2">
+                    <ion-item *ngIf="isOthers" fill="outline">
+                      <ion-input type="text"
+                        placeholder="Length" [(ngModel)]="column.length">
+                      </ion-input>
+                    </ion-item>
+                  </ion-col>
+  
+                  <ion-col >
+                    <ion-item fill="outline">
+                      <ion-select (ionChange)="constraintEvent($event)" 
+                        placeholder="Constraint" [(ngModel)]="column.constraint">
+                        
+                        <ion-select-option value="NOT NULL">Not Null</ion-select-option>
+                        <ion-select-option value="UNIQUE">Unique</ion-select-option>
+                        <ion-select-option value="PRIMARY KEY">
+                          Primary Key
+                        </ion-select-option>
+                        <ion-select-option value="DEFAULT">Default</ion-select-option>
+                        <ion-select-option value="AUTO INCREMENT">Identity</ion-select-option>
+
+                      </ion-select>
+                    </ion-item>
+                  </ion-col>
+
+                </ion-row>
+              </ion-grid> 
+            </ion-item> 
+
+            <ion-row class="ion-justify-content-center">
+              <ion-button  icon-only title="click to add more columns"    
+                shape="round" size="medium"(click)="addColumn()">
+                <ion-icon name="add"></ion-icon>
+              </ion-button>
+            </ion-row>
+          </ion-card>
+
+            <ion-button icon-only title="click to preview the script" 
+              shape="round" (click)="previewScript()">Preview Script
+            </ion-button>
+
+            <ion-button icon-only title="click to create a new table" 
+              shape="round" (click)="createNewTable()">Create Table
+            </ion-button>
+          
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+    <ion-modal #datamodal *ngIf="this.file!=='' "  trigger="show-data">
+      <ng-template>
+        <ion-content>
+
+          <ion-toolbar>
+            <ion-title>Preview</ion-title>
+
+            <ion-buttons slot="end">
+              <ion-button color="light" (click)="datamodal.dismiss()" >
+                X
+              </ion-button>
+            </ion-buttons>
+
+          </ion-toolbar>
+
+          <ion-card>
+            <ion-grid>
+              <ion-row *ngFor="let row of tableData">
+                <ion-col *ngFor="let col of row">{{col}}</ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card>
+
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+  </ion-content>
+
+  <ion-footer id="footer" class="footer text-muted">
+    Copyright © 2022 Analytics. All rights reserved.
+  </ion-footer>
+
+</body>
+
