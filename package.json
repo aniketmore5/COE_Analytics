@@ -27,6 +27,7 @@
     "@electron/remote": "^2.0.9",
     "@ionic/angular": "^6.1.9",
     "bootstrap": "^5.2.3",
+    "gulp": "^4.0.2",
     "ionic-selectable": "^4.8.0",
     "ionicons": "^6.0.3",
     "rxjs": "~6.6.0",
